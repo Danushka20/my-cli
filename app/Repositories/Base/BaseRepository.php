@@ -3,6 +3,7 @@
 namespace App\Repositories\Eloquent;
 
 use App\Repositories\BaseRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -15,14 +16,14 @@ class BaseRepository implements BaseRepositoryInterface
         $this->model = $model;
     }
 
-    public function all(): Collection
+    public function all(array $columns = ['*'], array $relations = []): Collection
     {
-        return $this->model->all();
+        return $this->queryWithRelations($relations)->get($columns);
     }
 
-    public function find(int $id): ?Model
+    public function find(int $id, array $columns = ['*'], array $relations = []): ?Model
     {
-        return $this->model->find($id);
+        return $this->queryWithRelations($relations)->find($id, $columns);
     }
 
     public function create(array $data): Model
@@ -46,5 +47,16 @@ class BaseRepository implements BaseRepositoryInterface
             return $record->delete();
         }
         return false;
+    }
+
+    protected function queryWithRelations(array $relations): Builder
+    {
+        $query = $this->model->newQuery();
+
+        if (!empty($relations)) {
+            $query->with($relations);
+        }
+
+        return $query;
     }
 }
