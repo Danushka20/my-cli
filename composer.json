@@ -28,7 +28,7 @@
             "Database\\Seeders\\": "database/seeders/",
             "Services\\": "app/Services/",
             "Repositories\\": "app/Repositories/",
-            "Interfaces\\": "app/Interfaces/"
+            "Interfaces\\": "app/Requests/"
         }
     },
     "autoload-dev": {
